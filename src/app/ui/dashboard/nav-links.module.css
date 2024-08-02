@@ -1,0 +1,19 @@
+.linck {
+  margin-left: 20px;
+}
+.active {
+  color: yellow;
+  text-shadow: 1px 1px 1px black;
+  animation: blink 1s ease infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
