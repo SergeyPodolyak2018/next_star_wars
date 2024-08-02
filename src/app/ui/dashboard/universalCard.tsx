@@ -6,6 +6,7 @@ export default function Card<T extends { [key: string]: any }>(props: {
   fields: string[];
   imagePath: string;
   children?: string | JSX.Element | JSX.Element[];
+  style?: React.CSSProperties;
 }) {
   return (
     <div className={styles.card}>
@@ -17,7 +18,10 @@ export default function Card<T extends { [key: string]: any }>(props: {
           alt='Picture of the author'
         />
       </div>
-      <div className={styles.fields}>
+      <div
+        className={styles.fields}
+        style={props.style}
+      >
         {props.fields.map((el, index) => {
           if (props.data && typeof props.data === 'object') {
             if (props.data.hasOwnProperty(el)) {

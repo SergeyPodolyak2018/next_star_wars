@@ -25,6 +25,7 @@ export default async function Page({
       <div className={styles.content}>
         {result.results.map((data) => (
           <Card
+            style={{ minHeight: '280px' }}
             key={data.id}
             data={data}
             fields={FIELDS.ships}
