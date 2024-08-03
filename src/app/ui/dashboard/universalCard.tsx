@@ -1,3 +1,5 @@
+'use client';
+import React from 'react';
 import styles from './universalCard.module.css';
 import Image from 'next/image';
 
@@ -8,14 +10,21 @@ export default function Card<T extends { [key: string]: any }>(props: {
   children?: string | JSX.Element | JSX.Element[];
   style?: React.CSSProperties;
 }) {
+  const [src, setSrc] = React.useState(
+    `${props.imagePath}${props.data.id}.jpg`
+  );
+
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
         <Image
-          src={`${props.imagePath}${props.data.id}.jpg`}
+          src={src}
           width={50}
           height={100}
+          blurDataURL='/placeholder.jpg'
+          placeholder='blur'
           alt='Picture of the author'
+          onError={() => setSrc('/placeholder.jpg')}
         />
       </div>
       <div

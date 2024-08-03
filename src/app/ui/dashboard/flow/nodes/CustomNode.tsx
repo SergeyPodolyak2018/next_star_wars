@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import {
   BaseEdge,
@@ -21,6 +22,7 @@ type TNodeData = {
 export type TCustomNode = Node<TNodeData>;
 
 export const CustomNodePerson = ({ data }: NodeProps<TNodeData>) => {
+  const [src, setSrc] = React.useState(`${IMAGES.people}${data.id}.jpg`);
   return (
     <div className={styles.nodePerson}>
       <div className={styles.header}></div>
@@ -28,9 +30,12 @@ export const CustomNodePerson = ({ data }: NodeProps<TNodeData>) => {
         <div className={styles.name}>{data.name}</div>
         <div className={styles.photo}>
           <Image
-            src={`${IMAGES.people}${data.id}.jpg`}
+            src={src}
             width={50}
             height={50}
+            blurDataURL='/placeholder.jpg'
+            placeholder='blur'
+            onError={() => setSrc('/placeholder.jpg')}
             alt='Picture of the person'
           />
         </div>
@@ -46,6 +51,8 @@ export const CustomNodePerson = ({ data }: NodeProps<TNodeData>) => {
 };
 
 export const CustomNodeFilm = ({ data }: NodeProps<TNodeData>) => {
+  const [src, setSrc] = React.useState(`${IMAGES.films}${data.id}.jpg`);
+
   return (
     <div className={styles.nodePerson}>
       <div className={styles.header}>
@@ -58,9 +65,12 @@ export const CustomNodeFilm = ({ data }: NodeProps<TNodeData>) => {
         <div className={styles.name}>{data.name}</div>
         <div className={styles.photo}>
           <Image
-            src={`${IMAGES.films}${data.id}.jpg`}
+            src={src}
             width={50}
             height={50}
+            blurDataURL='/placeholder.jpg'
+            placeholder='blur'
+            onError={() => setSrc('/placeholder.jpg')}
             alt='Picture of the film'
           />
         </div>
@@ -75,6 +85,8 @@ export const CustomNodeFilm = ({ data }: NodeProps<TNodeData>) => {
   );
 };
 export const CustomNodeShip = ({ data }: NodeProps<TNodeData>) => {
+  const [src, setSrc] = React.useState(`${IMAGES.ships}${data.id}.jpg`);
+
   return (
     <div className={styles.nodePerson}>
       <div className={styles.header}>
@@ -87,10 +99,14 @@ export const CustomNodeShip = ({ data }: NodeProps<TNodeData>) => {
         <div className={styles.name}>{data.name}</div>
         <div className={styles.photo}>
           <Image
-            src={`${IMAGES.ships}${data.id}.jpg`}
+            src={src}
             width={50}
-            height={50}
+            height={100}
+            blurDataURL='/placeholder.jpg'
+            placeholder='blur'
+            onError={() => setSrc('/placeholder.jpg')}
             alt='Picture of the ship'
+            objectFit='cover'
           />
         </div>
       </div>

@@ -1,22 +1,25 @@
 import { Edge, MarkerType, Node } from 'reactflow';
 import { TNodeInitial, TTypeNode } from './node.types';
 import { TAgregatedData } from './definitions';
+import { EDGE_COLORS } from './const';
 
 type TTempData<T> = {
   [key: number | string]: T;
 };
 
+type TNodeData = {
+  name: string;
+  id: number;
+};
+
 export const idCreator = (type: TTypeNode, id: number | string): string => {
   return type + '_' + id;
 };
-const idGeter = (id: string): number => {
-  return Number(id.split('_')[1]);
-};
-const idCreatorDuplex = (id: string, id2: string): string => {
+export const idCreatorDuplex = (id: string, id2: string): string => {
   return id + '-' + id2;
 };
 
-const getPosition = (
+export const getPosition = (
   id: number | string,
   type: TTypeNode,
   incrementor: number
@@ -39,34 +42,46 @@ const getPosition = (
   };
 };
 
+export const createNode = (
+  id: number,
+  type: TTypeNode,
+  data: TNodeData,
+  increment: number
+) => ({
+  id: idCreator(type, id),
+  type: type,
+  data: data,
+  position: getPosition(id, type, increment),
+});
+
 export const getNodesFromConfig = (config: TAgregatedData): Node[] => {
   const tempPerson: TTempData<Node> = {};
   const tempFilms: TTempData<Node> = {};
   const tempShips: TTempData<Node> = {};
   let incrementator = 0;
-  tempPerson[config.person.id] = {
-    id: idCreator('person', config.person.id),
-    type: 'person',
-    data: { name: config.person.name, id: config.person.id },
-    position: getPosition(config.person.id, 'person', 0),
-  };
+  tempPerson[config.person.id] = createNode(
+    config.person.id,
+    'person',
+    { name: config.person.name, id: config.person.id },
+    0
+  );
   for (const iterator of config.films) {
-    tempFilms[iterator.id] = {
-      id: idCreator('film', iterator.id),
-      type: 'film',
-      data: { name: iterator.title, id: iterator.id },
-      position: getPosition(iterator.id, 'film', incrementator),
-    };
+    tempFilms[iterator.id] = createNode(
+      iterator.id,
+      'film',
+      { name: iterator.title, id: iterator.id },
+      incrementator
+    );
     incrementator = incrementator + 1;
   }
   incrementator = 0;
   for (const iterator of config.ships) {
-    tempShips[iterator.id] = {
-      id: idCreator('ship', iterator.id),
-      type: 'ship',
-      data: { name: iterator.name, id: iterator.id },
-      position: getPosition(iterator.id, 'ship', incrementator),
-    };
+    tempShips[iterator.id] = createNode(
+      iterator.id,
+      'ship',
+      { name: iterator.name, id: iterator.id },
+      incrementator
+    );
     incrementator = incrementator + 1;
   }
 
@@ -78,25 +93,31 @@ export const getNodesFromConfig = (config: TAgregatedData): Node[] => {
   return result;
 };
 
+export const createEdge = (
+  idSource: string,
+  idTarget: string,
+  color: string
+): Edge => ({
+  id: idCreatorDuplex(idSource, idTarget),
+  source: idSource,
+  target: idTarget,
+  style: {
+    strokeWidth: 2,
+    stroke: color,
+  },
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+  },
+  type: 'custom-edge',
+  animated: false,
+});
+
 export const getEdgesFromConfig = (config: TAgregatedData): Edge[] => {
   const result: Edge[] = [];
   const personid = idCreator('person', config.person.id);
   for (const iterator of config.films) {
     const filmid = idCreator('film', iterator.id);
-    const connection1: Edge = {
-      id: idCreatorDuplex(personid, filmid),
-      source: personid,
-      target: filmid,
-      style: {
-        strokeWidth: 2,
-        stroke: 'rgba(73, 216, 73, 0.658)',
-      },
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-      },
-      type: 'custom-edge',
-      animated: false,
-    };
+    const connection1: Edge = createEdge(personid, filmid, EDGE_COLORS.film);
     result.push(connection1);
   }
   for (const ship of config.ships) {
@@ -104,20 +125,7 @@ export const getEdgesFromConfig = (config: TAgregatedData): Edge[] => {
     for (const film of config.films) {
       const filmid = idCreator('film', film.id);
       if (film.starships.includes(ship.id)) {
-        const connection2: Edge = {
-          id: idCreatorDuplex(filmid, shipId),
-          source: filmid,
-          target: shipId,
-          style: {
-            strokeWidth: 2,
-            stroke: 'rgb(162, 162, 35)',
-          },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-          },
-          type: 'custom-edge',
-          animated: false,
-        };
+        const connection2 = createEdge(filmid, shipId, EDGE_COLORS.ship);
         result.push(connection2);
       }
     }

@@ -53,4 +53,10 @@ export const IMAGES = {
   planets: 'https://starwars-visualguide.com/assets/img/planets/',
   ships: 'https://starwars-visualguide.com/assets/img/starships/',
   films: 'https://starwars-visualguide.com/assets/img/films/',
+  error: 'https://starwars-visualguide.com/assets/img/placeholder',
+};
+
+export const EDGE_COLORS = {
+  film: 'rgba(73, 216, 73, 0.658)',
+  ship: 'rgb(162, 162, 35)',
 };
